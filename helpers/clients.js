@@ -16,7 +16,7 @@ module.exports.getClientsInChannel = async (channelId) => {
     let clients = [];
 
     for (let i = 0; i < clientsIds.length; i++) {
-        console.log(`connectedUsers[clientsIds[${i}]] `, connectedUsers[clientsIds[i]])
+        console.log(`connectedUsers[clientsIds[${i}]] `, connectedUsers[clientsIds[i]]);
         clients.push(connectedUsers[clientsIds[i]]);
     }
     return new Promise((resolve, reject) => {

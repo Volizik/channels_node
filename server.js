@@ -1,23 +1,22 @@
-let {io, connectedUsers} = require('./app');
-const clientsHelper = require('./helpers/clients');
+let { io, connectedUsers } = require('./app');
+const { channelsAction } = require('./actions/channels.action');
+const { isAuthorized } = require('./middlewares/auth.middleware');
+
+io.use(isAuthorized);
 
 io.on('connection', socket => {
+    console.log('inside connection');
 
     socket.emit('connected', {});
-    
+
     socket.on('connected', function (userData) {
         connectedUsers[socket.id] = userData;
     });
 
-    socket.on('joinToChannel', function (params) {
-        socket.join(params['channelId']);
+    channelsAction(socket);
 
-        socket.broadcast.to(params['channelId']).emit('message', 'New user connected!');
-        io.to(params['channelId']).emit('message', `Hello ${params.name}!`);
-
-        clientsHelper.getClientsInChannel(params['channelId']).then((clients) => {
-            io.to(params['channelId']).emit('usersInside', clients);
-        });
+    socket.on('typing', function (params) {
+        io.to(params['channelId']).emit('typing', params.user);
     });
 
     socket.on('disconnect', () => {

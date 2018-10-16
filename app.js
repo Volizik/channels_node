@@ -5,7 +5,7 @@ const io = require('socket.io')(http);
 const connectedUsers = [];
 
 app.get('/*', (req, res) => {
-    res.json({message: 'Greetings from server!'});
+    res.status(404).end();
 });
 
 http.listen(3000, () => { console.log('listening on *:3000'); });
